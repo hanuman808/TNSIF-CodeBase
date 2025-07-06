@@ -1,7 +1,6 @@
 package DayThree.Scanner;
 import java.util.Scanner;
 
-import com.tnsif.daythree.scanner.TaxCalculation;
 public class PersonDemo {
 
 	public static void main(String[] args) {
