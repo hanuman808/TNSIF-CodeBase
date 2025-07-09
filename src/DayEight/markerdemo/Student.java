@@ -6,4 +6,4 @@ public class Student implements isRegistered {
 		System.out.println("Yes students is registered");
 	}
 
-}
+} 
