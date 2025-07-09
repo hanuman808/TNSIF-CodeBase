@@ -1,4 +1,4 @@
-package DayTen;
+package DayTen.singledimensiondemo;
 import java.util.Arrays;
 public class ArraysOperation {
 	

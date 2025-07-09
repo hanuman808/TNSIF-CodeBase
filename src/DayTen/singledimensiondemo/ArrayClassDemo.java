@@ -1,4 +1,4 @@
-package DayTen;
+package DayTen.singledimensiondemo;
 public class ArrayClassDemo {
 
     // Print int array
