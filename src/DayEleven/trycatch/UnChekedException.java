@@ -12,7 +12,6 @@ public class UnChekedException {
 		{
 			System.err.println("Specified index does not exist:"+ e.getMessage());
 		}
-
 	}
 
 }
