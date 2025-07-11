@@ -1,4 +1,4 @@
-package com.tnsif.DayTweleve.multithreading.copy;
+package DayTweleve.Multithreading;
 
 public class childDemo {
 

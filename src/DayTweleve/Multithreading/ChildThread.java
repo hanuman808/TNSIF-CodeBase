@@ -1,4 +1,4 @@
-package com.tnsif.DayTweleve.multithreading;
+package DayTweleve.Multithreading;
 
 public class ChildThread extends Thread{
 
