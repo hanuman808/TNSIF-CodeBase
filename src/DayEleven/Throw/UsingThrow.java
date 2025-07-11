@@ -16,13 +16,17 @@ public static void main(String[] args) {
 	per = acceptNumber();
 	try {
 		if(per<0) {
-			throw new negativeExcepton();
-		}else if(per>0) {
+			throw new negativeException();
+		}else if(per>100) {
 			throw new  greatervalueException();
-			System.out.println("Valid Percentage");
-		}catch(NegativeException | greatervalueException e) {
-			System.err.println("Error..."+e.getMessage());
+			
 		}
+		else {
+			System.out.println("Valid Percentage");
+		}
+	}
+	catch(negativeException | greatervalueException e) {
+		System.err.println("Error..."+ e.getMessage());
 	}
 }
 }

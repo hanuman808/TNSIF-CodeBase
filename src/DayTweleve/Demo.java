@@ -3,7 +3,7 @@ package DayTweleve;
 public class Demo {
 
 	public static void main(String[] args) {
-		Thread myThread = new ThreadLifeCycleDemo(4);
+		Thread myThread = new ThreadLifeCycleDemo();
 		System.out.println("Before Runnable State Thread is Alive");
 		myThread.isAlive();
 		try {Thread.sleep(450);
