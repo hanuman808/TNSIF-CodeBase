@@ -2,9 +2,14 @@ package DayTweleve.Multithreading;
 
 public class childDemo {
 
-	public static void main(String[] args) {
-		ChildThread c = new ChildThread(10, "Hello");
+public static void main(String[] args) {
+		
+		ChildThread c=new ChildThread(10, "Hello");
+		ChildThread c1=new ChildThread(5, "TNSIF");
+		
 		c.start();
-		System.out.println("End of the program ");
+		c1.start();
+		System.out.println("End of the Program");
+
 	}
 }
