@@ -1,4 +1,4 @@
-package DatThirteen;
+package DatThirteen.Synchronization;
 
 public class Account implements Bank {
 	//data members 
