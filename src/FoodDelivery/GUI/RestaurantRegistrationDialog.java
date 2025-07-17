@@ -2,11 +2,9 @@ package FoodDelivery.GUI;
 
 
 
-
-
-
 import javax.swing.*;
 
+import FoodDelivery.models.Restaurant;
 import FoodDelivery.services.RestaurantService;
 
 import java.awt.*;

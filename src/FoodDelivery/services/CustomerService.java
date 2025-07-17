@@ -1,12 +1,11 @@
 package FoodDelivery.services;
 
-
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import DayEight.Interface.Customer;
+import FoodDelivery.models.Customer;
+import FoodDelivery.models.User;
 import FoodDelivery.utils.DatabaseConnection;
 
 public class CustomerService {
@@ -16,40 +15,41 @@ public class CustomerService {
         try {
             conn.setAutoCommit(false);
 
-            // Insert into users table
             String userQuery = "INSERT INTO users (username, email, password, phone, user_type) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement userStmt = conn.prepareStatement(userQuery, Statement.RETURN_GENERATED_KEYS);
-            userStmt.setString(1, customer.getUsername());
-            userStmt.setString(2, customer.getEmail());
-            userStmt.setString(3, customer.getPassword());
-            userStmt.setString(4, customer.getPhone());
-            userStmt.setString(5, "CUSTOMER");
+            try (PreparedStatement userStmt = conn.prepareStatement(userQuery, Statement.RETURN_GENERATED_KEYS)) {
+                userStmt.setString(1, customer.getUsername());
+                userStmt.setString(2, customer.getEmail());
+                userStmt.setString(3, customer.getPassword()); // Consider hashing here
+                userStmt.setString(4, customer.getPhone());
+                userStmt.setString(5, "CUSTOMER");
 
-            int userResult = userStmt.executeUpdate();
+                int userResult = userStmt.executeUpdate();
 
-            if (userResult > 0) {
-                ResultSet keys = userStmt.getGeneratedKeys();
-                if (keys.next()) {
-                    int userId = keys.getInt(1);
-                    customer.setUserId(userId);
+                if (userResult > 0) {
+                    try (ResultSet keys = userStmt.getGeneratedKeys()) {
+                        if (keys.next()) {
+                            int userId = keys.getInt(1);
+                            customer.setUserId(userId);
 
-                    // Insert into customers table
-                    String customerQuery = "INSERT INTO customers (customer_id, address) VALUES (?, ?)";
-                    PreparedStatement customerStmt = conn.prepareStatement(customerQuery);
-                    customerStmt.setInt(1, userId);
-                    customerStmt.setString(2, customer.getAddress());
+                            String customerQuery = "INSERT INTO customers (customer_id, address) VALUES (?, ?)";
+                            try (PreparedStatement customerStmt = conn.prepareStatement(customerQuery)) {
+                                customerStmt.setInt(1, userId);
+                                customerStmt.setString(2, customer.getAddress());
 
-                    int customerResult = customerStmt.executeUpdate();
+                                int customerResult = customerStmt.executeUpdate();
 
-                    if (customerResult > 0) {
-                        conn.commit();
-                        return true;
+                                if (customerResult > 0) {
+                                    conn.commit();
+                                    return true;
+                                }
+                            }
+                        }
                     }
                 }
-            }
 
-            conn.rollback();
-            return false;
+                conn.rollback();
+                return false;
+            }
 
         } catch (SQLException e) {
             try {
@@ -70,26 +70,26 @@ public class CustomerService {
 
     public Customer authenticateCustomer(String username, String password) {
         Connection conn = DatabaseConnection.getConnection();
-        String query = "SELECT u.*, c.address FROM users u JOIN customers c ON u.user_id = c.customer_id WHERE u.username = ? AND u.password = ? AND u.user_type = 'CUSTOMER'";
+        String query = "SELECT u.*, c.address FROM users u JOIN customers c ON u.user_id = c.customer_id " +
+                       "WHERE u.username = ? AND u.password = ? AND u.user_type = 'CUSTOMER'";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(query);
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, username);
-            stmt.setString(2, password);
+            stmt.setString(2, password); // Should be hashed before comparing
 
-            ResultSet rs = stmt.executeQuery();
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Customer customer = new Customer();
+                    customer.setUserId(rs.getInt("user_id"));
+                    customer.setUsername(rs.getString("username"));
+                    customer.setEmail(rs.getString("email"));
+                    customer.setPassword(rs.getString("password"));
+                    customer.setPhone(rs.getString("phone"));
+                    customer.setAddress(rs.getString("address"));
+                    customer.setUserType(User.UserType.CUSTOMER);
 
-            if (rs.next()) {
-                Customer customer = new Customer();
-                customer.setUserId(rs.getInt("user_id"));
-                customer.setUsername(rs.getString("username"));
-                customer.setEmail(rs.getString("email"));
-                customer.setPassword(rs.getString("password"));
-                customer.setPhone(rs.getString("phone"));
-                customer.setAddress(rs.getString("address"));
-                customer.setUserType(User.UserType.CUSTOMER);
-
-                return customer;
+                    return customer;
+                }
             }
 
         } catch (SQLException e) {
@@ -104,9 +104,8 @@ public class CustomerService {
         Connection conn = DatabaseConnection.getConnection();
         String query = "SELECT u.*, c.address FROM users u JOIN customers c ON u.user_id = c.customer_id";
 
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 Customer customer = new Customer();

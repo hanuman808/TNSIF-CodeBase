@@ -1,17 +1,13 @@
 package FoodDelivery.services;
 
-
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import FoodDelivery.GUI.RestaurantDashboard;
+import FoodDelivery.models.Restaurant;
+import FoodDelivery.models.User; // Assuming this exists
 import FoodDelivery.utils.DatabaseConnection;
 
 public class RestaurantService {
 
-    public boolean registerRestaurant(RestaurantDashboard restaurant) {
+    public boolean registerRestaurant(Restaurant restaurant) {
         Connection conn = DatabaseConnection.getConnection();
         try {
             conn.setAutoCommit(false);
@@ -31,7 +27,7 @@ public class RestaurantService {
                 ResultSet keys = userStmt.getGeneratedKeys();
                 if (keys.next()) {
                     int userId = keys.getInt(1);
-                    restaurant.setUserId(userId);
+                    restaurant.setUserId(userId); // set back into the Restaurant object
 
                     // Insert into restaurants table
                     String restaurantQuery = "INSERT INTO restaurants (restaurant_id, name, address, cuisine_type) VALUES (?, ?, ?, ?)";
@@ -72,7 +68,9 @@ public class RestaurantService {
 
     public Restaurant authenticateRestaurant(String username, String password) {
         Connection conn = DatabaseConnection.getConnection();
-        String query = "SELECT u.*, r.name, r.address, r.cuisine_type FROM users u JOIN restaurants r ON u.user_id = r.restaurant_id WHERE u.username = ? AND u.password = ? AND u.user_type = 'RESTAURANT'";
+        String query = "SELECT u.*, r.name, r.address, r.cuisine_type " +
+                       "FROM users u JOIN restaurants r ON u.user_id = r.restaurant_id " +
+                       "WHERE u.username = ? AND u.password = ? AND u.user_type = 'RESTAURANT'";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -91,7 +89,7 @@ public class RestaurantService {
                 restaurant.setName(rs.getString("name"));
                 restaurant.setAddress(rs.getString("address"));
                 restaurant.setCuisineType(rs.getString("cuisine_type"));
-                restaurant.setUserType(User.UserType.RESTAURANT);
+                restaurant.setUserType(User.UserType.RESTAURANT); // Assuming this enum exists
 
                 return restaurant;
             }

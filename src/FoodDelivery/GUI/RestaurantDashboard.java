@@ -2,18 +2,18 @@ package FoodDelivery.GUI;
 
 
 
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import FoodDelivery.models.Order;
+import FoodDelivery.models.Restaurant;
 import FoodDelivery.services.OrderService;
-import FoodDelivery.services.RestaurantService;
 
 import java.awt.*;
 import java.util.List;
 
 public class RestaurantDashboard extends JFrame {
-    private RestaurantService restaurant;
+    private Restaurant restaurant;
     private OrderService orderService;
     private JTable ordersTable;
     private DefaultTableModel tableModel;
@@ -58,4 +58,6 @@ public class RestaurantDashboard extends JFrame {
             });
         }
     }
+
+	
 }

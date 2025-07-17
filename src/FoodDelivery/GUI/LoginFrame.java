@@ -3,8 +3,11 @@ package FoodDelivery.GUI;
 
 
 
+
 import javax.swing.*;
 
+import FoodDelivery.models.Customer;
+import FoodDelivery.models.Restaurant;
 import FoodDelivery.services.CustomerService;
 import FoodDelivery.services.RestaurantService;
 

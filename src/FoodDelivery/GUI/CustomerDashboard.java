@@ -3,12 +3,13 @@ package FoodDelivery.GUI;
 
 
 
-
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import DayEight.Interface.Customer;
+import FoodDelivery.models.Cart;
+import FoodDelivery.models.Customer;
+import FoodDelivery.models.FoodItem;
+import FoodDelivery.models.Order;
 import FoodDelivery.services.FoodService;
 import FoodDelivery.services.OrderService;
 

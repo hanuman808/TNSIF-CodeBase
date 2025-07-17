@@ -1,10 +1,13 @@
 package FoodDelivery.GUI;
 
 
-import models.Customer;
-import services.CustomerService;
+
 
 import javax.swing.*;
+
+import FoodDelivery.models.Customer;
+import FoodDelivery.services.CustomerService;
+
 import java.awt.*;
 
 public class CustomerRegistrationDialog extends JDialog {
